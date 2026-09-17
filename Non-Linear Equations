@@ -1,0 +1,76 @@
+1. Fixed Point Theorem
+import numpy as np
+
+def g(x):
+    return np.cos(x)  # g(x) = cos(x)
+
+def fixed_point(g, x0, tol=1e-6, max_iter=100):
+    x = x0
+    for i in range(max_iter):
+        x_next = g(x)
+        if abs(x_next - x) < tol:
+            return x_next, i+1
+        x = x_next
+    raise Exception("Did not converge")
+
+# Run it
+x0 = 0.5  # initial guess
+root, iterations = fixed_point(g, x0)
+
+print(f"Fixed point: {root:.6f}")
+print(f"f(x) = cos(x) - x ≈ {np.cos(root) - root:.2e}")
+print(f"Iterations: {iterations}")
+
+Newton-Raphson Method
+import numpy as np
+
+# Function and its derivative
+def f(x):
+    return np.cos(x) - x
+
+def df(x):
+    return -np.sin(x) - 1
+
+# Newton's method
+def newton(f, df, x0, tol=1e-6, max_iter=100):
+    x = x0
+    for i in range(max_iter):
+        x_new = x - f(x) / df(x)
+        if abs(x_new - x) < tol:
+            return x_new, i+1
+        x = x_new
+    raise Exception("Did not converge")
+
+# Try it
+root, iterations = newton(f, df, x0=0.5)
+print(f"Root: {root:.6f}")
+print(f"f(root) ≈ {f(root):.2e}")
+print(f"Iterations: {iterations}")
+
+
+import numpy as np
+
+def f(x):
+    return np.cos(x) - x
+
+def bisection(f, a, b, tol=1e-6, max_iter=100):
+    if f(a) * f(b) >= 0:
+        raise ValueError("f(a) and f(b) must have opposite signs")
+    
+    for i in range(max_iter):
+        c = (a + b) / 2
+        if abs(f(c)) < tol or abs(b - a) < tol:
+            return c, i+1
+        if f(a) * f(c) < 0:
+            b = c
+        else:
+            a = c
+    raise Exception("Did not converge")
+
+# Run it
+root, iterations = bisection(f, 0, 1)
+print(f"Root: {root:.6f}")
+print(f"f(root) ≈ {f(root):.2e}")
+print(f"Iterations: {iterations}")
+
+
